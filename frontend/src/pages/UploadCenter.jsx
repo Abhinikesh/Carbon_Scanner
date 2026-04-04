@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '../App.jsx';
+import api from '../api.js';
 
 const TABS = [
   { id: 'product', label: 'Product', Icon: ShoppingCart },
@@ -82,11 +83,28 @@ export default function UploadCenter() {
       return;
     }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 2000));
-    setLoading(false);
-    setSuccess(true);
-    showToast('Files processed successfully!', 'success');
-    setTimeout(() => navigate('/dashboard'), 1500);
+    try {
+      // Build multipart payload – backend expects field name "files"
+      const formData = new FormData();
+      files.forEach(({ file }) => formData.append('files', file));
+      formData.append('type', activeTab); // product | receipt | flight | barcode
+
+      await api.post('/api/scan', formData);
+
+      setLoading(false);
+      setSuccess(true);
+      showToast('Files processed successfully!', 'success');
+      setTimeout(() => navigate('/dashboard'), 1500);
+    } catch (err) {
+      setLoading(false);
+      const isOffline =
+        err.message === 'Failed to fetch' || err.status === undefined;
+      showToast(
+        isOffline
+          ? 'Cannot reach the server. Is the backend running on port 5001?'
+          : err.message || 'Processing failed. Please try again.'
+      );
+    }
   }
 
   return (

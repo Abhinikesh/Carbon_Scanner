@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Leaf, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import api from '../api.js';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [form, setForm]   = useState({ email: '', password: '' });
+  const [form, setForm]     = useState({ email: '', password: '' });
   const [showPw, setShowPw] = useState(false);
   const [error,  setError]  = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,9 +22,24 @@ export default function Login() {
       return;
     }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 1000));
-    setLoading(false);
-    navigate('/');
+    try {
+      const data = await api.post('/api/auth/login', {
+        email: form.email,
+        password: form.password,
+      });
+      // Store token if the backend returns one
+      if (data?.token) localStorage.setItem('cl_token', data.token);
+      navigate('/');
+    } catch (err) {
+      // Graceful fallback: show the server message or a network error hint
+      setError(
+        err.status === 0 || err.message === 'Failed to fetch'
+          ? 'Cannot reach the server. Make sure the backend is running on port 5001.'
+          : err.message || 'Login failed. Please try again.'
+      );
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

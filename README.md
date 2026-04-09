@@ -10,7 +10,7 @@
 
 | Home | Dashboard | Upload Center |
 |------|-----------|---------------|
-| ![Home](./screenshots/home.png) | ![Dashboard](./screenshots/dashboard.png) | ![Upload](./screenshots/upload_center.png) |
+| ![Home](./screenshots/home.png) | ![Dashboard](./dashboard.png) | ![Upload](./screenshots/upload_center.png) |
 
 | Education Hub | Settings |
 |---------------|----------|

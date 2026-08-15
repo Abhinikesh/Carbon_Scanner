@@ -78,7 +78,6 @@ export default function Dashboard() {
     };
   }, [selectedRange]);
 
-  // Fetch recent scans (limit = 5)
   useEffect(() => {
     let active = true;
     const fetchScans = async () => {

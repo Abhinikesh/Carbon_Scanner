@@ -53,7 +53,6 @@ export default function Dashboard() {
   const [scans, setScans] = useState([]);
   const [scansLoading, setScansLoading] = useState(true);
 
-  // Manual refresh on mount
   useEffect(() => {
     refreshStats();
   }, []);

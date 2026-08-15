@@ -57,7 +57,6 @@ export default function Dashboard() {
     refreshStats();
   }, []);
 
-  // Fetch chart data on mount and range change
   useEffect(() => {
     let active = true;
     const fetchChart = async () => {
